@@ -36,13 +36,13 @@ if ($_SESSION['role'] !== 'superadmin' && $_SESSION['role'] !== 'admin') {
 
 $db = new Database();
 $conn = $db->getConnection();
-$book = new Book($conn);
+Book::setConnection($conn);
 $id = $_GET['id'];
-$bookData = $book->find($id);
+$bookData = Book::find($id);
 
 if (!$bookData) {
     echo "<div class='alert alert-warning'>Book not found.</div>";
-    require_once 'layout/footer.php';
+    require_once '../layout/footer.php';
     exit;
 }
 ?>

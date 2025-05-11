@@ -89,19 +89,9 @@
             return $users ? count($users) : 0;   
         }
         
-        public static function countByRole($role) {
-            return parent::Count('role', $role);
-        }
-
-
         public static function usersAdded($time){
             $lastAdded = parent::findday($time);
             return $lastAdded ? $lastAdded : 0; 
-        }
-
-
-        public static function userStatus($status){
-            return parent::Count('status', $status);
         }
 
 

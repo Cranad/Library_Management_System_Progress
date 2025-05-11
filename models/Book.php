@@ -11,6 +11,8 @@ class Book extends Model {
     public $published_year;
     public $total_copies; 
     public $available_copies; 
+    public $status; 
+
     public $created_at;
     public $updated_at; 
 
@@ -116,5 +118,33 @@ class Book extends Model {
         }
     }
 
+    public static function getById($id) {
+        $result = parent::where('id', '=', $id);
+        return $result && isset($result[0]) ? new self($result[0]) : null;
+}
+
+    public function archive() {
+        $data = [
+            'status' => 'archived'
+        ];
+        $result = $this->update($data);
+        if ($result) {
+            $this->status = 'archived';
+            return true;
+        }
+        return false;
+    }
+
+    public function restore() {
+        $data = [
+            'status' => null
+        ];
+        $result = $this->update($data);
+        if ($result) {
+            $this->status = null;
+            return true;
+        }
+        return false;
+    }
 }
 ?>

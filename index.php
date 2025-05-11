@@ -27,14 +27,14 @@ $overdue_returns = count(Transaction::getOverdueReturns());
 $recent_activity = Transaction::all();
 
 if ($userRole === 'superadmin') {
-    $students = User::countByRole('student');
-    $staff = User::countByRole('staff');
-    $admins = User::countByRole('admin');
-    $others = User::countByRole('others');
-    $penalty_count = count(Penalty::all()); 
+    $students = count(User::findByRole('student')?? []);
+    $staff = count(User::findByRole('staff')?? []);
+    $admins = count(User::findByRole('admin') ?? []);
+    $others = count(User::findByRole('others')??[]);
+    $penalty_count = count(Penalty::all() ?? []); 
 } elseif ($userRole === 'admin') {
-    $borrowers = User::countByRole('student') + User::countByRole('staff') + User::countByRole('others');
-    $penalty_count = count(Penalty::all()); 
+    $borrowers = count(User::findByRole('student')?? []) + count(User::findByRole('staff')?? []) + count(User::findByRole('others')?? []);
+    $penalty_count = count(Penalty::all() ?? []); 
 } elseif ($userRole === 'student' || $userRole === 'staff' ||$userRole === 'others' ) {
     $borrowed_books_list = Transaction::getUserId($_SESSION['user_id']);
     $available_books = Book::getAvailableBooks(); 

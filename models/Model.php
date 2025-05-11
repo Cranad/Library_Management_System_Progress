@@ -110,20 +110,6 @@
             }
         }
 
-        // Count rows by a specific condition
-        protected static function Count($column, $value) {
-            try {
-                $sql = "SELECT COUNT(*) AS count FROM " . static::$table . " WHERE $column = :value";
-                $stmt = self::$conn->prepare($sql);
-                $stmt->bindValue(':value', $value);
-                $stmt->execute();
-                $row = $stmt->fetch();
-
-                return $row['count'] ?? 0;
-            } catch (PDOException $e) {
-                die("Error counting rows: " . $e->getMessage());
-            }
-        }
 
 
 
@@ -146,18 +132,17 @@
             }
         }
 
-        // protected static function belongsToMany($relatedClass, $pivotTable, $foreignKey, $relatedKey){
+        // protected static function belongsToMany($id, $relatedClass, $pivotTable, $foreignKey, $relatedKey){
         //     try{
-        //         $relatedTable= $relatedClass::$table;
-        //         $sql = "SELECT rt.* FROM $relatedTable rt INNER JOIN $pivotTable pt ON rt.id=pt.$relatedKey WHERE pt.$foreignKey:id";
+        //         $relatedTable = $relatedClass::$table;
+        //         $sql = "SELECT rt.* FROM $relatedTable rt INNER JOIN $pivotTable pt ON rt.id=pt.$relatedKey WHERE pt.$foreignKey=:id";
 
-        //         $stmt= self::$conn->prepare($sql);
-        //         $stmt->bindValue(':id', $this->id); 
-                
+        //         $stmt = self::$conn->prepare($sql);
+        //         $stmt->bindValue(':id', $id); 
+        //         // $stmt->bindValue(':id', $this->id); 
         //         $stmt->execute();
 
         //         $rows = $stmt->fetchAll();
-                
         //         return $rows ? array_map(fn($data) => new $relatedClass($data), $rows) : null;
 
         //     }catch (PDOException $e) {

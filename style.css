@@ -1,40 +1,48 @@
 
 .navbar {
     background-color: #CAE0BC !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
     transition: background 0.3s;
+    border-bottom: 2px solid #b6d7a8;
+}
+
+.navbar-brand {
+    font-family: 'Georgia', serif;
+    font-size: 1.7rem;
+    color: #198754 !important;
+    letter-spacing: 1px;
+    transition: color 0.2s;
 }
 
 .navbar-brand:hover {
-    color: #198754 !important;
-    transform: scale(1.05);
-    transition: color 0.2s, transform 0.2s;
+    color: #145c32 !important;
+    transform: scale(1.07);
 }
-
 
 .navbar-nav .nav-link {
-    color: #333 !important;
+    color: #2d3a22 !important;
     position: relative;
-    transition: color 0.2s, background 0.2s;
+    font-size: 1.08rem;
+    padding: 8px 18px !important;
+    margin: 0 2px;
+    border-radius: 5px;
+    transition: color 0.2s, background 0.2s, box-shadow 0.2s;
 }
-
 
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link:focus {
-    color: #198754 !important;
-    background-color: #e6f2e6 !important;
-    border-radius: 5px;
+    color: #fff !important;
+    background-color: #198754 !important;
+    box-shadow: 0 2px 8px rgba(25,135,84,0.08);
 }
-
 
 .navbar-nav .nav-link.active,
 .navbar-nav .nav-link.active:focus {
     color: #fff !important;
-    background-color: #198754 !important;
-    border-radius: 5px;
+    background-color: #145c32 !important;
     font-weight: bold;
+    box-shadow: 0 2px 8px rgba(25,135,84,0.12);
 }
-
 
 .navbar-nav .nav-link::after {
     content: '';
@@ -55,7 +63,6 @@
 
 .navbar-toggler {
     border-color: #198754;
+    background: #e9f5db;
 }
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(25,135,84,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-}
+

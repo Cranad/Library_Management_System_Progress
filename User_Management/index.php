@@ -72,7 +72,7 @@
                     <?php
                     $i = 1;
                     foreach ($users as $user):
-                        if ($user->role === 'student' || $user->role === 'staff' || $user->role === 'others' || $user->role === 'admin'):
+                        if ($user->role === 'student' || $user->role === 'staff' || $user->role === 'others'):
                     ?>
                             <tr>
                                 <td class="text-center"><?= $i++ ?></td>

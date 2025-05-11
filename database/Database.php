@@ -4,7 +4,7 @@
 class Database{
     private $host = "localhost";
     private $username = "root";
-    private $password = "ArisaZin_15";
+    private $password = "Taurus0425";
     private $database ="library_db";
     private $conn;
     public function __construct(){

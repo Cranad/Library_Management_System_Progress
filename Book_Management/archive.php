@@ -1,28 +1,64 @@
 <?php
 require_once '../database/Database.php';
 require_once '../models/Book.php';
+include '../layout/header.php';
 
-session_start();
-if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['admin', 'super-admin'])) {
-    die("Access denied.");
+if (!isset($_SESSION['email'])) {
+    http_response_code(404);
+    echo '<script>
+    Swal.fire({
+        title: "Error!",
+        text: "Login first!",
+        icon: "error",
+        confirmButtonText: "Ok"
+    }).then(function() {
+        window.location.href = "../auth/login.php";
+    });
+    </script>';
+    exit();
 }
 
-if (!isset($_GET['id'])) {
-    die("Missing book ID.");
+if ($_SESSION['role'] !== 'superadmin' && $_SESSION['role'] !== 'admin' ) {
+    http_response_code(403);
+    echo '<script>
+    Swal.fire({
+        title: "Error!",
+        text: "No user access.",
+        icon: "error",
+        confirmButtonText: "Ok"
+    }).then(function() {
+        window.location.href = "../index.php";
+    });
+    </script>';
+    exit();
 }
 
 $id = $_GET['id'];
 $db = new Database();
 $conn = $db->getConnection();
-$book = new Book($conn);
+Book::setConnection($conn);
 
 // Get the book first
-$bookData = $book->getById($id);
-if ($bookData && $bookData['available_copies'] == $bookData['total_copies']) {
-    if ($book->archive($id)) {
-        header("Location: index.php");
+$bookData = Book::getById($id);
+if ($bookData && $bookData->available_copies == $bookData->total_copies) {
+    if ($bookData->archive()) {
+        echo "<script>
+            Swal.fire({
+                title: 'Archived!',
+                text: 'Book has been successfully archived.',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            }).then(() => window.location.href='index.php');
+        </script>";
     } else {
-        echo "Failed to archive book.";
+                echo "<script>
+            Swal.fire({
+                title: 'Archived!',
+                text: 'Failed to archive book.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            }).then(() => window.location.href='index.php');
+        </script>";
     }
 } else {
     echo "<script>

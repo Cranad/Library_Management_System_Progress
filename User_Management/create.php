@@ -85,6 +85,7 @@ if ($_SESSION['role'] !== 'superadmin' && $_SESSION['role'] !== 'admin') {
                     <option value="">-- Select Role --</option>
                     <option value="student">Student</option>
                     <option value="staff">Staff</option>
+                    <option value="admin">Admin</option>
                     <option value="others">Others</option>
                 </select>
             </div>

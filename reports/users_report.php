@@ -1,44 +1,66 @@
+
 <?php
 require_once '../database/Database.php';
 require_once '../models/User.php';
 require '../plugins/fpdf/fpdf.php';
 
-$db = new Database();
-$conn = $db->getConnection();
+$database = new Database();
+$db = $database->getConnection();
 
-User::setConnection($conn);
+User::setConnection($db);
 
+$status = $_GET['status'] ?? 'all';
 
-$admins = User::findByRole('admin');
-
-$pdf = new FPDF();
-$pdf->AddPage();
-$pdf->SetFont('Arial', 'B', 14);
-$pdf->Cell(190, 10, 'All Registered Admins', 1, 1, 'C');
-$pdf->Ln(10);
-
-$pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(10, 10, '#', 1);
-$pdf->Cell(50, 10, 'Name', 1);
-$pdf->Cell(60, 10, 'Email', 1);
-$pdf->Cell(40, 10, 'Phone Number', 1);
-$pdf->Cell(30, 10, 'Status', 1);
-$pdf->Ln();
-
-$pdf->SetFont('Arial', '', 12);
-if ($admins) {
-    $i = 1;
-    foreach ($admins as $admin) {
-        $pdf->Cell(10, 10, $i++, 1);
-        $pdf->Cell(50, 10, $admin->name, 1);
-        $pdf->Cell(60, 10, $admin->email, 1);
-        $pdf->Cell(40, 10, $admin->phone_number, 1);
-        $pdf->Cell(30, 10, ucfirst($admin->account_status), 1);
-        $pdf->Ln();
-    }
+if ($status === 'active') {
+    $users = User::findByStatus('active');
+    $file_name = 'Active_Users_Report.pdf';
+} elseif ($status === 'inactive') {
+    $users = User::findByStatus('inactive');
+    $file_name = 'Inactive_Users_Report.pdf';
 } else {
-    $pdf->Cell(190, 10, 'No admin profiles found.', 1, 1, 'C');
+    $users = User::all();
+    $file_name = 'All_Users_Report.pdf';
 }
 
-$pdf->Output('I', 'Admin_Profiles.pdf');
+//fpdf
+$pdf = new FPDF();
+$pdf->AddPage();
+$pdf->SetFont('Arial', 'B', 20);
+
+if ($status === 'active') {
+    $pdf->Cell(0, 10, 'All Active User Report', 0, 2, 'C');
+} elseif ($status === 'inactive') {
+    $pdf->Cell(0, 10, 'All Inactive User Report', 0, 2, 'C');
+} else {
+    $pdf->Cell(0, 10, 'All User Report', 0, 2, 'C');
+}
+
+$pdf->Ln(5);
+
+//set new format for column headers
+$pdf->SetFont('Arial', 'B', 10);
+$pdf->Cell(30, 10, 'No.', 1, 0, 'C');
+$pdf->Cell(50, 10, 'Name', 1, 0, 'C');
+$pdf->Cell(50, 10, 'Email', 1, 0, 'C');
+$pdf->Cell(30, 10, 'Role', 1, 0, 'C');
+$pdf->Cell(30, 10, 'Status', 1, 1, 'C');
+
+//set new format for Contents
+$pdf->SetFont('Arial', '', 10);
+
+if (count($users) > 0) {
+    $i = 1;
+    foreach ($users as $user) {
+        $pdf->Cell(30, 10, $i++, 1, 0, 'C');
+        $pdf->Cell(50, 10, $user->first_name . ' ' . $user->last_name, 1, 0, 'C');
+        $pdf->Cell(50, 10, $user->email, 1, 0, 'C');
+        $pdf->Cell(30, 10, ucfirst($user->role), 1, 0, 'C');
+        $pdf->Cell(30, 10, ucfirst($user->status), 1, 1, 'C');
+    }
+} else {
+    $pdf->Cell(0, 10, 'No user record available', 1, 1, 'C');
+}
+
+
+$pdf->Output('I', $file_name);
 ?>

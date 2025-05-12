@@ -11,7 +11,7 @@
         }
 
         // select all
-        protected static function all(){
+        public static function all(){
             try{
                 $sql="SELECT * FROM ".static::$table; // SQL query to select all rows
                 $result= self::$conn->query($sql); // access query method and pass sql
@@ -25,7 +25,7 @@
         }
 
         // Find row by id
-        protected static function find($id){
+        public static function find($id){
             try{
                 $sql="SELECT * from ". static::$table." WHERE id=:id"; // SQL query with placeholder
                 $stmt=self::$conn->prepare($sql); // PDO prepare statement
@@ -38,7 +38,7 @@
         }
 
         // Create a new row in the table
-        protected static function create (array $data){
+        public static function create (array $data){
             try{
                 $columns= implode(",", array_keys($data)); // take column names from data array and joins them seperated by comma
                 $values = implode(",", array_map(fn($key)=>":$key", array_keys($data))); // placeholders
@@ -60,7 +60,7 @@
         }
         
         // Update update row by id
-        protected static function updateById($id, array $data){
+        public static function updateById($id, array $data){
             try{
                 $set = implode(", ", array_map(fn($key)=>"$key = :$key", array_keys($data))); 
                 $sql = "UPDATE ". static::$table . " SET $set where id=:id"; // SQL update query
@@ -81,7 +81,7 @@
         }
 
         // Delete row by id
-        protected static function deleteById($id){
+        public static function deleteById($id){
             try{
                 $sql = "DELETE FROM ". static::$table . " WHERE id =:id"; // SQL delete query
                 $stmt=self::$conn->prepare($sql);
@@ -96,7 +96,7 @@
         }
 
         // Count row by day
-        protected static function findday($day) {
+        public static function findday($day) {
             try {
                 $sql = "SELECT COUNT(*) AS count FROM " . static::$table . " WHERE created_at >= :day"; // SQL query
                 $stmt = self::$conn->prepare($sql);
@@ -109,50 +109,5 @@
                 die("Error fetching data: " . $e->getMessage());
             }
         }
-
-
-
-
-        protected static function where($column, $operator, $value){
-            try{
-                $sql = "SELECT * FROM " . static::$table . " WHERE $column $operator :value";
-
-                $stmt = self::$conn->prepare($sql);
-
-                $stmt-> bindValue(':value',$value);
-
-                $stmt->execute();
-
-                $result = $stmt;
-                
-                $rows = $result->fetchAll();
-                return count ($rows)>0 ? $rows : null;
-            }catch (PDOException $e) {
-                die("Error updating rows: " . $e->getMessage());
-            }
-        }
-
-        // protected static function belongsToMany($id, $relatedClass, $pivotTable, $foreignKey, $relatedKey){
-        //     try{
-        //         $relatedTable = $relatedClass::$table;
-        //         $sql = "SELECT rt.* FROM $relatedTable rt INNER JOIN $pivotTable pt ON rt.id=pt.$relatedKey WHERE pt.$foreignKey=:id";
-
-        //         $stmt = self::$conn->prepare($sql);
-        //         $stmt->bindValue(':id', $id); 
-        //         // $stmt->bindValue(':id', $this->id); 
-        //         $stmt->execute();
-
-        //         $rows = $stmt->fetchAll();
-        //         return $rows ? array_map(fn($data) => new $relatedClass($data), $rows) : null;
-
-        //     }catch (PDOException $e) {
-        //         die("Error updating rows: " . $e->getMessage());
-        //     }
-        // }
-        //related class = class na gusto makuha 
-        //pivot table = table na naglalaman ng foreign key ng both tables
-        //foreign key = foreign key ng current table
-        //related key = foreign key ng related table
-    
 
     }

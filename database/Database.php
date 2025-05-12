@@ -5,7 +5,7 @@ class Database{
     private $host = "localhost";
     private $username = "root";
     private $password = "Taurus0425";
-    private $database ="library_db";
+    private $database ="library";
     private $conn;
     public function __construct(){
         //try-catch, error handling

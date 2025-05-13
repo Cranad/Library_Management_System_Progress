@@ -39,15 +39,18 @@ if ($_SESSION['role'] !== 'superadmin') {
 $users = User::all();
 
 ?>
-    <div class="d-flex justify-content-center mt-5">
+    <!-- <div class="d-flex justify-content-center mt-5">
         <h3 class="mb-0">Admin Management</h3>
-    </div>
+    </div> -->
     <div class="container py-5">
         <div class="card shadow-lg rounded-4 border-0">
             <div class="card-body">
-                <a class="btn btn-primary mb-2 mt-2" href="create.php"> Add New Admin </a>
-                <div class="d-flex align-items-end mb-3">
-                    <a href="../reports/users_report.php?role=admin" target="_blank" class="btn btn-secondary me-2">View All Registered Admins</a>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="text-center fw-bold text-primary mb-0">User Management</h2>
+                    <div>
+                        <a class="btn btn-primary" href="create.php">Add New Admin</a>
+                        <a href="../reports/users_report.php?role=admin" target="_blank" class="btn btn-secondary">View All Registered Admins</a>
+                    </div>
                 </div>
                 <table id="adminsTable" class="table table-striped table-hover text-center align-middle">
                     <thead class="table-dark">
@@ -109,4 +112,3 @@ $users = User::all();
     </div>
 <?php   include 'datatables.php';
         include '../layout/footer.php';
-        

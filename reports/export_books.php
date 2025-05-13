@@ -38,7 +38,7 @@ if ($books) {
         $borrowerNames = [];
         foreach ($borrowers as $transaction) {
             $user = User::find($transaction->user_id);
-            if ($user) {
+            if ($user && !in_array($user->name, $borrowerNames)) {
                 $borrowerNames[] = $user->name;
             }
         }

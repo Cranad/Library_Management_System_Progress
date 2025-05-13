@@ -42,31 +42,37 @@ foreach ($users as $user) {
 }
 ?>
 
-<div class="container mt-5">
-    <h2>Return Book</h2>
-    <form action="return.php" method="POST">
-        <div class="mb-3">
-            <label for="transaction_id" class="form-label">Borrowed Book</label>
-            <select name="transaction_id" id="transaction_id" class="form-control" required>
-                <option value="" disabled selected>Select a borrowed book</option>
-                <?php foreach ($transactions as $transaction): ?>
-                    <?php
-                    $book = Book::find($transaction->book_id);
-                    $user = User::find($transaction->user_id);
-                    ?>
-                    <option value="<?= $transaction->id ?>">
-                        <?= $book->title ?> borrowed by <?= $user->name ?> (Due: <?= $transaction->due_date ?>)
-                    </option>
-                <?php endforeach; ?>
-            </select>
+<div class="container mt-5 d-flex justify-content-center align-items-center">
+    <div class="card shadow-lg p-4" style="width: 50%;">
+        <div class="card-body">
+            <h2 class="text-center fw-bold text-primary mb-4">Return Book</h2>
+            <form action="return.php" method="POST">
+                <div class="mb-3">
+                    <label for="transaction_id" class="form-label">Borrowed Book</label>
+                    <select name="transaction_id" id="transaction_id" class="form-control" required>
+                        <option value="" disabled selected>Select a borrowed book</option>
+                        <?php foreach ($transactions as $transaction): ?>
+                            <?php
+                            $book = Book::find($transaction->book_id);
+                            $user = User::find($transaction->user_id);
+                            ?>
+                            <option value="<?= $transaction->id ?>">
+                                <?= $book->title ?> borrowed by <?= $user->name ?> (Due: <?= $transaction->due_date ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="return_date" class="form-label">Return Date</label>
+                    <input type="datetime-local" name="return_date" id="return_date" class="form-control" required>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="index.php" class="btn btn-secondary">Back</a>
+                </div>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="return_date" class="form-label">Return Date</label>
-            <input type="datetime-local" name="return_date" id="return_date" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a href="index.php" class="btn btn-secondary">Back</a>
-    </form>
+    </div>
 </div>
 
 <?php include '../layout/footer.php'; ?>

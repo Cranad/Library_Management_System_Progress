@@ -1,3 +1,6 @@
+body, html {
+  font-family: 'Georgia', serif !important;
+}
 
 .navbar {
     background-color: #CAE0BC !important;
@@ -66,3 +69,47 @@
     background: #e9f5db;
 }
 
+/* General table styles for all tables */
+table {
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.07);
+}
+
+thead th {
+  background: #e9f5db;
+  color: #145c32;
+  font-weight: bold;
+  border-bottom: 2px solid #b6d7a8;
+}
+
+tbody tr {
+  transition: background 0.2s;
+}
+
+tbody tr:hover {
+  background: #f6fbe9;
+}
+
+td, th {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+  text-align: center !important;
+}
+
+.table-bordered th, .table-bordered td {
+  border: 1px solid #b6d7a8 !important;
+}
+
+.table thead th {
+  border-top: none;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f8fbe9;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #e6f2d8;
+}

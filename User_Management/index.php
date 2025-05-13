@@ -49,13 +49,14 @@
 
 ?>
 
-<div class="d-flex justify-content-center mt-5">
-    <h3 class="mb-0">User Management</h3>
-</div>
+
 <div class="container py-5">
     <div class="card shadow-lg rounded-4 border-0">
         <div class="card-body">
-            <a class="btn btn-primary mb-2 mt-2" href="create.php">Create New User</a>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-center fw-bold text-primary">User Management</h2>
+                <a class="btn btn-primary mb-2 mt-2" href="create.php">Create New User</a>
+            </div>
             <table id="usersTable" class="table table-striped table-hover text-center align-middle">
                 <thead class="table-dark">
                     <tr>

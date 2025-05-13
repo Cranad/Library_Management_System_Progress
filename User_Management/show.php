@@ -126,7 +126,7 @@ $transactions = Transaction::getUserId($user->id);
                             if ($transaction->return_date) {
                                 $status = 'returned';
                                 $statusClass = 'text-success fw-bold';
-                            } elseif (strtotime($transaction->due_date) < time()) {
+                            } elseif ($transaction->due_date < date('Y-m-d H:i:s')) {
                                 $status = 'overdue';
                                 $statusClass = 'text-danger fw-bold';
                             }
@@ -136,9 +136,9 @@ $transactions = Transaction::getUserId($user->id);
                                 <td><?= $book->author ?></td>
                                 <td><?= $categoryName ?></td>
                                 <td><?= $book->published_year ?></td>
-                                <td><?= $transaction->borrow_date ?></td>
-                                <td><?= $transaction->due_date ?></td>
-                                <td><?= $transaction->return_date ?? 'Not Returned' ?></td>
+                                <td><?= date('M d, Y h:i A', strtotime($transaction->borrow_date)) ?></td>
+                                <td><?= date('M d, Y h:i A', strtotime($transaction->due_date)) ?></td>
+                                <td><?= $transaction->return_date ? date('M d, Y h:i A', strtotime($transaction->return_date)) : 'Not Returned' ?></td>
                                 <td class="<?= $statusClass ?>">
                                     <?= ucfirst($status) ?>
                                 </td>
@@ -152,6 +152,9 @@ $transactions = Transaction::getUserId($user->id);
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="mb-4 p-4">
+        <a href="index.php" class="btn btn-secondary">Back</a>
     </div>
 </div>
 

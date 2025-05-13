@@ -61,55 +61,97 @@ if (!$book) {
 $transactions = Transaction::getBookId($bookId);
 ?>
 
-<div class="container mt-5">
-    <h2>Book Details</h2>
-
-    <?php if ($book): ?>
-        <div class="mb-4">
-            <p><strong>Title:</strong> <?= $book->title ?></p>
-            <p><strong>Author:</strong> <?= $book->author ?></p>
-            <p><strong>Category:</strong> <?= $book->category ?></p>
-            <p><strong>Published Year:</strong> <?= $book->published_year ?></p>
-            <p><strong>Total Copies:</strong> <?= $book->total_copies?></p>
-            <p><strong>Available Copies:</strong> <?= $book->available_copies ?></p>
+<div class="container py-5">
+    <div class="card shadow-lg p-4 rounded-4 mx-auto" style="max-width: 600px;">
+        <h2 class="text-center fw-bold text-primary">Book Details</h2>
+        <hr>
+        <div class="table-responsive">
+            <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <th>Title</th>
+                        <td><?= $book->title ?></td>
+                    </tr>
+                    <tr>
+                        <th>Author</th>
+                        <td><?= $book->author ?></td>
+                    </tr>
+                    <tr>
+                        <th>Category</th>
+                        <td><?= $book->category ?></td>
+                    </tr>
+                    <tr>
+                        <th>Published Year</th>
+                        <td><?= $book->published_year ?></td>
+                    </tr>
+                    <tr>
+                        <th>Total Copies</th>
+                        <td><?= $book->total_copies ?></td>
+                    </tr>
+                    <tr>
+                        <th>Available Copies</th>
+                        <td><?= $book->available_copies ?></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+    </div>
 
-        <h4>Borrowing History</h4>
-        <table class="table table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>Borrower</th>
-                    <th>Borrow Date</th>
-                    <th>Due Date</th>
-                    <th>Return Date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if ($transactions): ?>
-                    <?php foreach ($transactions as $transaction): ?>
-                        <?php $borrower = User::find($transaction->user_id); ?>
-                        <tr>
-                            <td><?= $borrower->name ?></td>
-                            <td><?= $transaction->borrow_date ?></td>
-                            <td><?= $transaction->due_date ?></td>
-                            <td>
-                                <?= $transaction->return_date ? $transaction->return_date : 'Not returned' ?>
-                            </td>
-                            <td style="color: <?= $transaction->status === 'overdue' ? 'red' : 'black' ?>">
-                                <?= ucfirst($transaction->status) ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="5" class="text-center">No borrow history found.</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-
-    <?php else: ?>
-        <div class="alert alert-warning">Book not found.</div>
-    <?php endif; ?>
+    <div class="card shadow-lg p-4 rounded-4 mx-auto mt-4">
+        <h2 class="text-center fw-bold text-primary">Borrowing History</h2>
+        <hr>
+        <div class="table-responsive">
+            <table class="table table-bordered mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center">Borrower</th>
+                        <th class="text-center">Borrow Date</th>
+                        <th class="text-center">Due Date</th>
+                        <th class="text-center">Return Date</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($transactions): ?>
+                        <?php foreach ($transactions as $transaction): ?>
+                            <?php 
+                                $borrower = User::find($transaction->user_id);
+                                $status = 'borrowed';
+                                $statusClass = 'text-primary fw-bold';
+                                if ($transaction->return_date) {
+                                    $status = 'returned';
+                                    $statusClass = 'text-success fw-bold';
+                                } elseif (strtotime($transaction->due_date) < time()) {
+                                    $status = 'overdue';
+                                    $statusClass = 'text-danger fw-bold';
+                                }
+                            ?>
+                            <tr>
+                                <td class="text-center"><?= $borrower->name?></td>
+                                <td class="text-center"><?= date('M d, Y h:i A', strtotime($transaction->borrow_date)) ?></td>
+                                <td class="text-center"><?= date('M d, Y h:i A', strtotime($transaction->due_date)) ?></td>
+                                <td class="text-center"><?= $transaction->return_date ? date('M d, Y h:i A', strtotime($transaction->return_date)) : 'Not Returned' ?></td>
+                                <td class="text-center">
+                                    <span class="px-2 py-1 rounded 
+                                    <?php if ($status === 'returned'): ?>bg-success-subtle text-success fw-bold
+                                        <?php elseif ($status === 'overdue'): ?>bg-danger-subtle text-danger fw-bold
+                                            <?php else: ?>bg-primary-subtle text-primary fw-bold
+                                                <?php endif; ?>
+                                    ">
+                                    <?= ucfirst($status) ?>
+                                </span></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr><td colspan="5" class="text-center">No borrow history found.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="mb-4 p-4">
+        <a href="index.php" class="btn btn-secondary">Back</a>
+    </div>
 </div>
 
 <?php require_once '../layout/footer.php'; ?>

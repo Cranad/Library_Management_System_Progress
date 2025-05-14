@@ -40,19 +40,22 @@ $db = new Database();
 $conn = $db->getConnection();
 User::setConnection($conn);
 
-if (!isset($_GET['id'])) {
-    http_response_code(400);
-    echo "<div class='mx-auto text-center'><h1>400 Bad Request</h1><p>No user ID provided.</p></div>";
-    exit;
-}
-
 
 $user = User::find($_GET['id']);
 
 
 if (!$user) {
     http_response_code(404);
-    echo "<div class='mx-auto text-center'><h1>404 Not Found</h1><p>User does not exist.</p></div>";
+    echo "<script>
+        Swal.fire({
+            title: 'Error!',
+            text: 'User does not exist.',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        }).then(function() {
+            window.location.href = 'index.php';
+        });
+    </script>";
     exit;
 }
 

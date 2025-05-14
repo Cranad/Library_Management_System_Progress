@@ -21,6 +21,21 @@ if (!isset($_SESSION['email'])) {
     </script>';
     exit();
 }
+if ($_SESSION['role'] !== 'superadmin' && $_SESSION['role'] !== 'admin') {
+    http_response_code(403);
+    echo '<script>
+    Swal.fire({
+        title: "Error!",
+        text: "No user access.",
+        icon: "error",
+        confirmButtonText: "Ok"
+    }).then(function() {
+        window.location.href = "../index.php";
+    });
+    </script>';
+    exit();
+}
+
 
 $id = $_GET['id'];
 $book = Book::find($id);

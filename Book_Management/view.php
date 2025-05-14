@@ -52,8 +52,18 @@ User::setConnection($conn);
 
 $book = Book::find($bookId);
 
-if (!$book) {
-    echo "<div class='alert alert-warning'>Book not found.</div>";
+
+if (!$bookData) {
+    echo "<script>
+        Swal.fire({
+            title: 'Error!',
+            text: 'Book not found.',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        }).then(function() {
+            window.location.href = 'index.php';
+        });
+    </script>";
     require_once '../layout/footer.php';
     exit;
 }

@@ -41,7 +41,16 @@ $id = $_GET['id'];
 $bookData = Book::find($id);
 
 if (!$bookData) {
-    echo "<div class='alert alert-warning'>Book not found.</div>";
+    echo "<script>
+        Swal.fire({
+            title: 'Error!',
+            text: 'Book not found.',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        }).then(function() {
+            window.location.href = 'index.php';
+        });
+    </script>";
     require_once '../layout/footer.php';
     exit;
 }

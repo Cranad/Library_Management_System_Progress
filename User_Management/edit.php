@@ -4,7 +4,17 @@ require_once '../models/User.php';
 include '../layout/header.php'; 
 
 if (!isset($_SESSION['email'])) {
-    header('Location: ../auth/login.php');
+    http_response_code(404);
+    echo '<script>
+    Swal.fire({
+        title: "Error!",
+        text: "Login first!",
+        icon: "error",
+        confirmButtonText: "Ok"
+    }).then(function() {
+        window.location.href = "../auth/login.php";
+    });
+    </script>';
     exit();
 }
 
